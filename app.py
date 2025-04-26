@@ -10,18 +10,32 @@ from sklearn.ensemble import RandomForestClassifier
 # Load model and training column info
 @st.cache_resource
 def load_model():
-    return joblib.load("cardio_model.pkl")
+    try:
+        model = joblib.load("cardio_model.pkl")
+        return model
+    except Exception as e:
+        st.error(f"Error loading model: {e}")
+        return None
 
 @st.cache_resource
 def load_columns():
-    return joblib.load("training_columns.pkl")
+    try:
+        training_columns = joblib.load("training_columns.pkl")
+        return training_columns
+    except Exception as e:
+        st.error(f"Error loading columns: {e}")
+        return None
 
 model = load_model()
 training_columns = load_columns()
 
+# Check if model and columns loaded successfully
+if model is None or training_columns is None:
+    st.stop()  # Stop the app if there are issues with loading model/columns
+
 # Set page config and title
 st.set_page_config(page_title="Cardiovascular Risk Predictor", layout="centered")
-st.title("❤️ Cardiovascular Disease Risk Predictor")
+st.title(" Cardiovascular Disease Risk Predictor")
 st.markdown("Enter the patient details below:")
 
 # Input fields
@@ -60,12 +74,9 @@ if st.button("Predict Risk"):
     pred_prob = model.predict_proba(input_encoded)[0][prediction]
 
     if prediction == 1:
-        st.error(f"⚠️ High Risk of Cardiovascular Disease (Confidence: {pred_prob:.2f})")
+        st.error(f" High Risk of Cardiovascular Disease (Confidence: {pred_prob:.2f})")
     else:
-        st.success(f"✅ Low Risk of Cardiovascular Disease (Confidence: {pred_prob:.2f})")
+        st.success(f" Low Risk of Cardiovascular Disease (Confidence: {pred_prob:.2f})")
 
-
-
-   
   
    
