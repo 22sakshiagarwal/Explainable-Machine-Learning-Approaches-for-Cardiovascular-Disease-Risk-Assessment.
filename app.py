@@ -1,10 +1,12 @@
-# --- Streamlit Cardio Risk Predictor ---
+# --- Streamlit Cardio Risk Predictor with SHAP ---
 # To run locally: `streamlit run app.py`
 
 import pandas as pd
 import numpy as np
 import joblib
+import shap
 import streamlit as st
+import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestClassifier
 
 # Load model and training column info
@@ -31,11 +33,11 @@ training_columns = load_columns()
 
 # Check if model and columns loaded successfully
 if model is None or training_columns is None:
-    st.stop()  # Stop the app if there are issues with loading model/columns
+    st.stop()
 
 # Set page config and title
 st.set_page_config(page_title="Cardiovascular Risk Predictor", layout="centered")
-st.title(" Cardiovascular Disease Risk Predictor")
+st.title("🫀 Cardiovascular Disease Risk Predictor with Explainability")
 st.markdown("Enter the patient details below:")
 
 # Input fields
@@ -43,8 +45,8 @@ age = st.number_input("Age (years)", 18, 100)
 gender = st.selectbox("Gender", ["Male", "Female"])
 ap_hi = st.number_input("Resting Blood Pressure (mmHg)", 80, 200)
 ap_lo = st.number_input("Diastolic Blood Pressure (mmHg)", 40, 150)
-cholesterol = st.selectbox("Cholesterol Level", [1, 2, 3])
-glucose = st.selectbox("Glucose Level", [1, 2, 3])
+cholesterol = st.selectbox("Cholesterol Level (1=Normal, 2=Above Normal, 3=Well Above Normal)", [1, 2, 3])
+glucose = st.selectbox("Glucose Level (1=Normal, 2=Above Normal, 3=Well Above Normal)", [1, 2, 3])
 smoke = st.selectbox("Smoking (0=No, 1=Yes)", [0, 1])
 alco = st.selectbox("Alcohol Intake (0=No, 1=Yes)", [0, 1])
 active = st.selectbox("Physical Activity (0=No, 1=Yes)", [0, 1])
@@ -74,9 +76,20 @@ if st.button("Predict Risk"):
     pred_prob = model.predict_proba(input_encoded)[0][prediction]
 
     if prediction == 1:
-        st.error(f" High Risk of Cardiovascular Disease (Confidence: {pred_prob:.2f})")
+        st.error(f" High Risk: Cardiovascular Disease detected! (Confidence: {pred_prob:.2f})")
     else:
-        st.success(f" Low Risk of Cardiovascular Disease (Confidence: {pred_prob:.2f})")
+        st.success(f" Low Risk: No Cardiovascular Disease detected. (Confidence: {pred_prob:.2f})")
+
+    # SHAP explanation
+    st.subheader("Feature Contribution (SHAP Explanation)")
+
+    explainer = shap.TreeExplainer(model)
+    shap_values = explainer.shap_values(input_encoded)
+
+    # Plot SHAP force plot
+    plt.figure()
+    shap.force_plot(explainer.expected_value[1], shap_values[1], input_encoded, matplotlib=True, show=False)
+    st.pyplot(plt.gcf())
 
   
    
