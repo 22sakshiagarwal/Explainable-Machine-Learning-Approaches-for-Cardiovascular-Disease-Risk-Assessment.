@@ -22,15 +22,3 @@ This project implements a **Cardiovascular Disease Prediction Model** using a **
 - **Python Libraries**: pandas, numpy, scikit-learn, shap, matplotlib, streamlit
 
 ---
-
-## Project Structure
-
-
-│
-├── app.py                   # Streamlit web app
-├── model.pkl                # Trained Random Forest model (joblib format)
-├── preprocessor.pkl         # Preprocessing pipeline (if any)
-├── requirements.txt         # List of Python dependencies
-├── README.md                # Project documentation
-├── .gitignore               # Git ignore file to exclude unnecessary files
-└── data/                    # (Optional) Sample input data or dataset
