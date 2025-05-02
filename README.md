@@ -35,5 +35,6 @@ This project implements a **Cardiovascular Disease Prediction Model** using a **
 ---
 ## Usage
  1.Run the Streamlit app
-    streamlit run app.py
+
+ streamlit run app.py
 ---
