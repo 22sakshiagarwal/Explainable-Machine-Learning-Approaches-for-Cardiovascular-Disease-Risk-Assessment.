@@ -22,3 +22,18 @@ This project implements a **Cardiovascular Disease Prediction Model** using a **
 - **Python Libraries**: pandas, numpy, scikit-learn, shap, matplotlib, streamlit
 
 ---
+## 🔧 Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/22sakshiagarwal/Explainable-Machine-Learning-Approaches-for-Cardiovascular-Disease-Risk-Assessment.git
+   cd Explainable-Machine-Learning-Approaches-for-Cardiovascular-Disease-Risk-Assessment
+
+---
+## Install dependencies
+ pip install -r requirements.txt
+---
+## Usage
+ 1.Run the Streamlit app
+    streamlit run app.py
+---
